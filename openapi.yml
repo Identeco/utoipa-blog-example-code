@@ -1,0 +1,96 @@
+openapi: 3.0.3
+info:
+  title: Credential Check API definition
+  description: Enables clients to anonymously check whether their credentials have been involved in a known data breach.
+  contact:
+    name: Identeco
+    url: https://identeco.de
+    email: contact@identeco.de
+  license:
+    name: ''
+  version: 1.0.2
+servers:
+- url: http://localhost:8080/
+  description: Local development server
+paths:
+  /check_credentials:
+    post:
+      tags:
+      - crate
+      summary: Checks whether an email-password combination is known to been involved in a data breach.
+      description: Checks whether an email-password combination is known to been involved in a data breach.
+      operationId: check_credentials
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CcRequest'
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CcResponse'
+        '400':
+          description: The request body contained ill formatted values
+          content:
+            text/plain:
+              schema:
+                type: string
+              examples:
+                TooLong:
+                  value: Prefix has a length of 7, but the maximum is 6
+                TooShort:
+                  value: Prefix has a length of 3, but the minimum is 4
+components:
+  schemas:
+    CcRequest:
+      type: object
+      description: The request body for the `check_credentials` endpoint.
+      required:
+      - prefix
+      - credentials
+      properties:
+        credentials:
+          type: string
+          format: base64
+          description: Cryptographically treated email-password combination
+          example: 02a8902230d79486d10ec6eb6
+        prefix:
+          type: string
+          format: base64
+          description: Prefix of the hashed email
+          example: cri4
+          maxLength: 6
+          minLength: 4
+    CcResponse:
+      type: object
+      description: The response body for the `check_credentials` endpoint.
+      required:
+      - credentials
+      - matches
+      properties:
+        credentials:
+          type: string
+          format: base64
+          description: The double blinded user input
+          example: 0326da340f354cec41be1c1246
+        matches:
+          type: array
+          items:
+            type: string
+            format: base64
+          description: |-
+            Cryptographically treated email-password combinations associated with the
+            user provided prefix
+          example: de6ceb426447319caff8d28f42
+  securitySchemes:
+    My-Api-Key:
+      type: apiKey
+      in: header
+      name: My-Api-Key
+      description: Custom authentication header
+security:
+- My-Api-Key: []
