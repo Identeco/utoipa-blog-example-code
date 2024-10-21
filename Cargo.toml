@@ -6,7 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-utoipa = { version = "4", features = ["actix_extras", "yaml"] }
+utoipa = { version = "5", features = ["actix_extras", "yaml"] }
 utoipa-swagger-ui = { version = "7", features = ["actix-web"] }
 actix-web = "4"
 serde_json = "1"
