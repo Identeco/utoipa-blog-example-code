@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.1.0
 info:
   title: Credential Check API definition
   description: Enables clients to anonymously check whether their credentials have been involved in a known data breach.
@@ -15,10 +15,8 @@ servers:
 paths:
   /check_credentials:
     post:
-      tags:
-      - crate
+      tags: []
       summary: Checks whether an email-password combination is known to been involved in a data breach.
-      description: Checks whether an email-password combination is known to been involved in a data breach.
       operationId: check_credentials
       requestBody:
         content:
